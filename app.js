@@ -8,13 +8,15 @@ const bodyParser = require('body-parser');
 const env = require('dotenv').config();
 
 var db = require('./models');
-db.sequelize.sync();
+db.sequelize.sync({force:true});
+// db.sequelize.sync();
 
 
 var authMiddleware = require('./middleware/authMiddleware');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var casesRouter = require('./routes/case');
 
 
 var app = express();
@@ -22,7 +24,6 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
-// app.use(sequelize.sequelize);
 
 app.use(cors());
 // view engine setup
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(authMiddleware);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/case', casesRouter);
 
 
 
