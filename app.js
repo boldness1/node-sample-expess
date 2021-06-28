@@ -8,8 +8,11 @@ const bodyParser = require('body-parser');
 const env = require('dotenv').config();
 
 var db = require('./models');
-db.sequelize.sync({force:true});
-// db.sequelize.sync();
+
+//Burayi acarsan ilk update'te hersey gider
+// db.sequelize.sync({force:true});
+
+db.sequelize.sync();
 
 
 var authMiddleware = require('./middleware/authMiddleware');
