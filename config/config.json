@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "advocate_V",
+    "password": "AKIAQB3UAFQC7YFZHNPN,sR3",
+    "database": "advocateV",
+    "host": "advocatev.cxfrdp6oru0f.eu-west-1.rds.amazonaws.com",
     "dialect": "mysql"
   }
 }
