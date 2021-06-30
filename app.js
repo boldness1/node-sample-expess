@@ -10,9 +10,9 @@ const env = require('dotenv').config();
 var db = require('./models');
 
 //Burayi acarsan ilk update'te hersey gider
-db.sequelize.sync({force:true});
+// db.sequelize.sync({force:true});
 
-// db.sequelize.sync();
+db.sequelize.sync();
 
 
 var authMiddleware = require('./middleware/authMiddleware');
