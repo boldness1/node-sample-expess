@@ -2,27 +2,28 @@ var express = require('express');
 var router = express.Router();
 
 const env = require('dotenv').config();
-const {User,Case,Defendant,Prosecutor} = require('../models');
+const {User, Case, Defendant, Prosecutor} = require('../models');
 
 /* GET users listing. */
-router.post('/',  function (req, res, next) {
+router.post('/', function (req, res, next) {
     // res.send('user route');
     //   const {name,email} = req.body.params;
     // console.log(name,email);
     // console.log(req.body.params);
 });
 
-router.get('/all',  async function (req, res, next) {
+router.get('/all', async function (req, res, next) {
     try {
         const cases = await Case.findAll({include: [{all: true, nested: true}]});
         res.send(cases);
-    }catch (err) {
+    } catch (err) {
         console.log(err);
     }
 });
 
-router.post('/create',  async function (req, res, next) {
+router.post('/create', async function (req, res, next) {
     const {case_data} = req.body.params;
+    console.log(req.body.params);
     try {
         const relatedCase = await Case.create({
             status: 1,
@@ -53,11 +54,30 @@ router.post('/create',  async function (req, res, next) {
         });
 
         await relatedCase.update({defendant_id: defendant.id, prosecutor_id: prosecutor.id})
-    }catch (err) {
+    } catch (err) {
         console.log(err);
     }
 
     // res.send(user);
+});
+
+router.get('/detail/:id', async function (req, res, next) {
+
+    const caseId = req.params.id;
+    try {
+        const caseDetail = await Case.findOne({
+            where: {
+                id: caseId
+            },
+            include: [{all: true, nested: true}]
+        });
+
+        res.send(caseDetail);
+
+    } catch (error) {
+        console.log(error);
+    }
+
 });
 
 module.exports = router;
