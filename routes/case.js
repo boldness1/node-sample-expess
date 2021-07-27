@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
+const { Op } = require("sequelize");
+const moment = require('moment');
 const env = require('dotenv').config();
 const {User, Case, Defendant, Prosecutor} = require('../models');
 
@@ -14,7 +15,11 @@ router.post('/', function (req, res, next) {
 
 router.get('/all', async function (req, res, next) {
     try {
-        const cases = await Case.findAll({include: [{all: true, nested: true}]});
+        const cases = await Case.findAll({
+            include: [{
+                all: true, nested: true
+            }]
+        });
         res.send(cases);
     } catch (err) {
         console.log(err);
@@ -77,6 +82,50 @@ router.get('/detail/:id', async function (req, res, next) {
     } catch (error) {
         console.log(error);
     }
+
+});
+
+router.get('/upcoming', async function (req, res, next) {
+
+    const response = {};
+    const dateTomorrow = moment().subtract(1,'day');
+    const dateYesterday = moment().add(1,'day');
+
+    //Cases Today
+    try {
+        response.todayCases = await Case.findAll({
+
+            where: {
+                case_date: {
+                    [Op.between]: [dateTomorrow, dateYesterday]
+                }
+            },
+            include: [{all: true, nested: true}]
+
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    //Cases Coming Soon
+    try {
+        response.upcomingCases = await Case.findAll({
+
+            where: {
+                case_date: {
+                    [Op.between]: [moment(),moment().add(2,'day')]
+                }
+            },
+            include: [{all: true, nested: true}]
+
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    res.send(response);
 
 });
 
