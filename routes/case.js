@@ -93,13 +93,16 @@ router.get('/upcoming', async function (req, res, next) {
     const dateTomorrow = moment().add(1,'day');
     const dateYesterday = moment().subtract(1,'day');
 
+
     //Cases Today
     try {
         response.todayCases = await Case.findAll({
 
             where: {
                 case_date: {
-                    [Op.between]: [dateTomorrow, dateYesterday]
+                    [Op.gt]: moment(),
+                    [Op.lt]:  dateTomorrow,
+
                 }
             },
             include: [{all: true, nested: true}]
@@ -116,7 +119,7 @@ router.get('/upcoming', async function (req, res, next) {
 
             where: {
                 case_date: {
-                    [Op.between]: [moment(),moment().add(2,'day')]
+                    [Op.between]: [dateTomorrow,moment().add(2,'day')]
                 }
             },
             include: [{all: true, nested: true}]
