@@ -90,8 +90,8 @@ router.get('/detail/:id', async function (req, res, next) {
 router.get('/upcoming', async function (req, res, next) {
 
     const response = {};
-    const dateTomorrow = moment().subtract(1,'day');
-    const dateYesterday = moment().add(1,'day');
+    const dateTomorrow = moment().add(1,'day');
+    const dateYesterday = moment().subtract(1,'day');
 
     //Cases Today
     try {
