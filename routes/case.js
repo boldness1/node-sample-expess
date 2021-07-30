@@ -28,6 +28,7 @@ router.get('/all', async function (req, res, next) {
 
 router.post('/create', async function (req, res, next) {
     const {case_data} = req.body.params;
+    let saved_case = {};
     console.log(req.body.params);
     try {
         const relatedCase = await Case.create({
@@ -58,7 +59,8 @@ router.post('/create', async function (req, res, next) {
             CaseId: relatedCase.id
         });
 
-        await relatedCase.update({defendant_id: defendant.id, prosecutor_id: prosecutor.id})
+
+         res.send(relatedCase.update({defendant_id: defendant.id, prosecutor_id: prosecutor.id}))
     } catch (err) {
         console.log(err);
     }
