@@ -16,6 +16,9 @@ router.post('/', function (req, res, next) {
 router.get('/all', async function (req, res, next) {
     try {
         const cases = await Case.findAll({
+            where: {
+                status: 1
+            },
             include: [{
                 all: true, nested: true
             }]
@@ -133,6 +136,17 @@ router.get('/upcoming', async function (req, res, next) {
 
     res.send(response);
 
+});
+
+router.delete('/delete', async function (req, res, next) {
+
+    const caseId = req.params.id;
+    
+    await Case.destroy({
+        where: {
+            id: caseId
+        }
+    });
 });
 
 module.exports = router;

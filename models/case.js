@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         this.hasOne(Prosecutor);
     }
   };
+
   Case.init({
     status: DataTypes.INTEGER,
     location: DataTypes.STRING,
@@ -24,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Case',
+    paranoid: true,
   });
   return Case;
 };
