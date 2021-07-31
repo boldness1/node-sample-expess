@@ -90,8 +90,8 @@ router.get('/detail/:id', async function (req, res, next) {
 router.get('/upcoming', async function (req, res, next) {
 
     const response = {};
-    const dateTomorrow = moment().add(1,'day');
-    const dateYesterday = moment().subtract(1,'day');
+    const dateTomorrow = moment().startOf('day').add(1,'day').set({hour:3,minute:0,second:0,millisecond:0});
+    const dateToday = moment().set({hour:3,minute:0,second:0,millisecond:0});
 
 
     //Cases Today
@@ -100,7 +100,7 @@ router.get('/upcoming', async function (req, res, next) {
 
             where: {
                 case_date: {
-                    [Op.gt]: moment(),
+                    [Op.gt]: dateToday,
                     [Op.lt]:  dateTomorrow,
 
                 }
@@ -119,7 +119,8 @@ router.get('/upcoming', async function (req, res, next) {
 
             where: {
                 case_date: {
-                    [Op.between]: [dateTomorrow,moment().add(2,'day')]
+                    [Op.gt]: moment().endOf('day'),
+                    [Op.lt]: moment().add(2,'day'),
                 }
             },
             include: [{all: true, nested: true}]
