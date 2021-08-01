@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate({Case}) {
-        this.belongsTo(Case);
+        this.belongsTo(Case,{onUpdate:'Cascade',foreignKey:{allowNull:false}});
     }
   };
   Prosecutor.init({

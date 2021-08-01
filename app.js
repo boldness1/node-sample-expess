@@ -12,7 +12,7 @@ var db = require('./models');
 //Burayi acarsan ilk update'te hersey gider
 // db.sequelize.sync({force:true});
 
-db.sequelize.sync();
+// db.sequelize.sync();
 
 
 var authMiddleware = require('./middleware/authMiddleware');
@@ -20,6 +20,7 @@ var authMiddleware = require('./middleware/authMiddleware');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var casesRouter = require('./routes/case');
+var authRouter = require('./routes/auth');
 
 
 var app = express();
@@ -39,11 +40,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+app.use('/auth', authRouter);
 app.use(authMiddleware);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/case', casesRouter);
+
 
 
 

@@ -1,9 +1,22 @@
 
-const env = require('dotenv').config().parsed;
+const authService = require('../services/Auth/authService');
 
-const authUser = function (req, res, next) {
+const authMiddleware = function (req, res, next) {
     // console.log('test');
-    env.ACCESS_TOKEN === req.header('ACCESS_TOKEN') ? next() : res.send('Not Authorized!');
+    // env.ACCESS_TOKEN === req.header('ACCESS_TOKEN') ? next() : res.send('Not Authorized!');
+      const access_token = req.header('ACCESS_TOKEN');
+      const api_key = req.header('API_KEY');
+
+      let authVerified = authService.verifyAuth(access_token,api_key);
+
+    if(authVerified.success && authVerified.user){
+        req.user = authVerified.user;
+        next();
+    }
+
+    else
+        res.send(authVerified);
+
 }
 
-module.exports = authUser;
+module.exports = authMiddleware;

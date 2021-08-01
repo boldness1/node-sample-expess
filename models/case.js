@@ -9,9 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({Defendant,Prosecutor}) {
-        this.hasOne(Defendant);
-        this.hasOne(Prosecutor);
+
+    static associate({Defendant, Prosecutor, User}) {
+        // this.belongsTo(User,{foreignKey:'UserId'});
+        this.hasOne(Defendant,{ onUpdate:'Cascade',foreignKey:{allowNull:false}});
+        this.hasOne(Prosecutor,{ onUpdate:'Cascade',foreignKey:{allowNull:false}});
     }
   };
 
@@ -21,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     case_no: DataTypes.INTEGER,
     defendant_id: DataTypes.INTEGER,
     prosecutor_id: DataTypes.INTEGER,
-    case_date: DataTypes.DATE
+    case_date: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Case',
