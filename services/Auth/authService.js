@@ -12,8 +12,8 @@ function verifyAuth(access_token, api_key){
    return verifyUserToken(access_token)
 }
 
-function loginUser(user){
-    let user_token = jwt.sign({ username: user.email, user_id: user.id}, env.ACCESS_SECRET, { expiresIn: '1d' });
+async function loginUser(user){
+    let user_token = await jwt.sign({ username: user.email, user_id: user.id}, env.ACCESS_SECRET, { expiresIn: '1d' });
 
      return {
          success:'Token Generated!',
