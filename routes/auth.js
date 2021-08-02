@@ -19,10 +19,12 @@ router.post('/login', async function (req, res, next) {
 
         if(potentialUser){
 
-            let isPasswordValid = bcrypt.compareSync(password, potentialUser.password);
+            let isPasswordValid = await bcrypt.compareSync(password, potentialUser.password);
 
             if(isPasswordValid){
-               res.send(await authService.loginUser(potentialUser));
+               let userInfo = await authService.loginUser(potentialUser)
+               res.send(userInfo);
+               return;
             }
 
         }

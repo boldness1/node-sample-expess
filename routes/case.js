@@ -103,7 +103,6 @@ router.get('/upcoming', async function (req, res, next) {
     const dateTomorrow = moment().startOf('day').add(1,'day').set({hour:3,minute:0,second:0,millisecond:0});
     const dateToday = moment().set({hour:3,minute:0,second:0,millisecond:0});
 
-
     //Cases Today
     try {
         response.todayCases = await Case.findAll({
@@ -112,9 +111,8 @@ router.get('/upcoming', async function (req, res, next) {
                 case_date: {
                     [Op.gt]: dateToday,
                     [Op.lt]:  dateTomorrow,
-                    UserId:req.user.user_id,
-
-                }
+                },
+                UserId:req.user.user_id,
             },
             include: [{all: true, nested: true}]
 
