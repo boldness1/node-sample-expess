@@ -20,8 +20,8 @@ router.post('/add', async function (req, res, next) {
 router.post('/notify', async function (req, res, next) {
     // res.send('user route');
     // const {user_id} = req.params;
-
-   res.send( await userService.pushNotification());
+    let user_id = req.user.user_id;
+   res.send( await userService.pushNotification(user_id));
 
 });
 

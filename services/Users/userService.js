@@ -36,20 +36,26 @@ const { Expo } = require('expo-server-sdk')
     }
 }
 
-async function pushNotification(){
+async function pushNotification(user_id){
+    const user = await User.findOne({
+        where: {
+            id: user_id
+        },
+    });
+
+
     let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
     let messages = [];
 
     messages.push({
-        to: 'ExponentPushToken[tFfieIP6HORtfibpRoqbYl]',
+        to: user.expoToken,
         sound: 'default',
         body: 'This is a test notification',
         data: { withSome: 'data' },
-        icon: "../../public/images/advocateV.png",
     })
 
     let chunks = expo.chunkPushNotifications(messages);
-    let tickets = [];
+    // let tickets = [];
     await (async () => {
         // Send the chunks to the Expo push notification service. There are
         // different strategies you could use. A simple one is to send one chunk at a
@@ -58,7 +64,7 @@ async function pushNotification(){
             try {
                 let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
 
-                tickets.push(...ticketChunk);
+                // tickets.push(...ticketChunk);
 
                 // NOTE: If a ticket contains an error code in ticket.details.error, you
                 // must handle it appropriately. The error codes are listed in the Expo

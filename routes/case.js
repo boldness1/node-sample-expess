@@ -128,10 +128,10 @@ router.get('/upcoming', async function (req, res, next) {
 
             where: {
                 case_date: {
-                    [Op.gt]: moment().endOf('day'),
+                    [Op.gt]: dateToday,
                     [Op.lt]: moment().add(2,'day'),
-                    UserId:req.user.user_id,
-                }
+                },
+                UserId:req.user.user_id,
             },
             include: [{all: true, nested: true}]
 

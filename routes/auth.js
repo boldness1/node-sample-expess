@@ -9,7 +9,8 @@ const authService = require("../services/Auth/authService");
 router.post('/login', async function (req, res, next) {
 
     const {email,password,expoToken} = req.body;
-
+    console.log(expoToken)
+    console.log(req.body)
     try{
         const potentialUser = await User.findOne({
             where: {
