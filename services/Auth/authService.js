@@ -1,5 +1,6 @@
 const env = require('dotenv').config().parsed;
 const jwt = require('jsonwebtoken');
+const {User} = require('../../models');
 
 function verifyAuth(access_token, api_key){
      if (!isApiKeyValid(api_key)){
@@ -61,6 +62,13 @@ function verifyUserToken(access_token) {
 
 }
 
+async function registerUserExpoToken(user, expoToken) {
+
+    user.expoToken = expoToken;
+    user.save();
+
+}
 
 
-module.exports = {verifyAuth, loginUser, logoutUser};
+
+module.exports = {verifyAuth, loginUser, registerUserExpoToken};

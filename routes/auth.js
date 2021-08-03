@@ -8,7 +8,7 @@ const authService = require("../services/Auth/authService");
 
 router.post('/login', async function (req, res, next) {
 
-    const {email,password} = req.body;
+    const {email,password,expoToken} = req.body;
 
     try{
         const potentialUser = await User.findOne({
@@ -23,6 +23,8 @@ router.post('/login', async function (req, res, next) {
 
             if(isPasswordValid){
                let userInfo = await authService.loginUser(potentialUser)
+               await authService.registerUserExpoToken(potentialUser, expoToken)
+
                res.send(userInfo);
                return;
             }
