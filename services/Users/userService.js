@@ -50,8 +50,8 @@ async function pushNotification(user_id){
     messages.push({
         to: user.expoToken,
         sound: 'default',
-        body: 'This is a test notification',
-        data: { withSome: 'data' },
+        body: 'This is a test notification'
+        // data: { withSome: 'data' },
     })
 
     let chunks = expo.chunkPushNotifications(messages);
