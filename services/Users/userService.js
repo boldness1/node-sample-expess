@@ -84,50 +84,7 @@ async function pushNotification(user_id){
         data:chunks
     }
 
-    // let receiptIds = [];
-    // for (let ticket of tickets) {
-    //     // NOTE: Not all tickets have IDs; for example, tickets for notifications
-    //     // that could not be enqueued will have error information and no receipt ID.
-    //     if (ticket.id) {
-    //         receiptIds.push(ticket.id);
-    //     }
-    // }
-    //
-    //  expo.chunkPushNotificationReceiptIds(receiptIds);
 
-    // await (async () => {
-    //     // Like sending notifications, there are different strategies you could use
-    //     // to retrieve batches of receipts from the Expo service.
-    //     for (let chunk of receiptIdChunks) {
-    //         try {
-    //             let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
-    //             console.log(receipts);
-    //
-    //             // The receipts specify whether Apple or Google successfully received the
-    //             // notification and information about an error, if one occurred.
-    //
-    //             // for (let receiptId in receipts) {
-    //             //     console.log(receipts, )
-    //             //     let {status, message, details} = receipts[receiptId];
-    //             //     if (status === 'ok') {
-    //             //         continue;
-    //             //     } else if (status === 'error') {
-    //             //         console.error(
-    //             //             `There was an error sending a notification: ${message}`
-    //             //         );
-    //             //         if (details && details.error) {
-    //             //             // The error codes are listed in the Expo documentation:
-    //             //             // https://docs.expo.io/push-notifications/sending-notifications/#individual-errors
-    //             //             // You must handle the errors appropriately.
-    //             //             console.error(`The error code is ${details.error}`);
-    //             //         }
-    //             //     }
-    //             // }
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     }
-    // })();
 }
  
 

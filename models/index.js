@@ -7,7 +7,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'production';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
-
+// const cron = require('node-cron');
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -30,6 +30,12 @@ Object.keys(db).forEach(modelName => {
     db[modelName].associate(db);
   }
 });
+
+
+
+// cron.schedule('*/5 * * * * *', () => {
+//     console.log('running a task every minute');
+// });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

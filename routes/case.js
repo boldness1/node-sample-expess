@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const moment = require('moment');
 const env = require('dotenv').config();
 const {User,Case, Defendant, Prosecutor} = require('../models');
-
+const caseService = require('../services/Cases/casesService')
 
 /* GET users listing. */
 router.post('/', function (req, res, next) {
@@ -75,6 +75,15 @@ router.post('/create', async function (req, res, next) {
     }
 
     // res.send(user);
+});
+
+router.post('/update', async function (req, res, next) {
+    const {case_data} = req.body.params;
+    const userId = req.user.user_id;
+
+    const updatedData = await caseService.updateCase(case_data,userId);
+
+    res.send(updatedData);
 });
 
 router.get('/detail/:id', async function (req, res, next) {
