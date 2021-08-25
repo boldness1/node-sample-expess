@@ -137,7 +137,7 @@ router.get('/upcoming', async function (req, res, next) {
 
             where: {
                 case_date: {
-                    [Op.gt]: dateToday,
+                    [Op.gt]: dateTomorrow,
                     [Op.lt]: moment().add(3,'day'),
                 },
                 UserId:req.user.user_id,

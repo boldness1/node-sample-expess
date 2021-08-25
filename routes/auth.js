@@ -9,8 +9,7 @@ const authService = require("../services/Auth/authService");
 router.post('/login', async function (req, res, next) {
 
     const {email,password,expoToken} = req.body;
-    console.log(expoToken)
-    console.log(req.body)
+
     try{
         const potentialUser = await User.findOne({
             where: {
@@ -24,6 +23,8 @@ router.post('/login', async function (req, res, next) {
 
             if(isPasswordValid){
                let userInfo = await authService.loginUser(potentialUser)
+
+                if(req.header('APP-CLIENT') !== 'WEB-CLIENT' && expoToken !== null)
                await authService.registerUserExpoToken(potentialUser, expoToken)
 
                res.send(userInfo);

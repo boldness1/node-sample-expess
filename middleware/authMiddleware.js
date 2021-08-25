@@ -1,20 +1,21 @@
-
 const authService = require('../services/Auth/authService');
 
 const authMiddleware = function (req, res, next) {
     // console.log('test');
     // env.ACCESS_TOKEN === req.header('ACCESS_TOKEN') ? next() : res.send('Not Authorized!');
-      const access_token = req.header('ACCESS_TOKEN');
-      const api_key = req.header('API_KEY');
 
-      let authVerified = authService.verifyAuth(access_token,api_key);
+    //User access token
+    const access_token = req.header('ACCESS_TOKEN');
 
-    if(authVerified.success && authVerified.user){
+    //Node api key
+    const api_key = req.header('API_KEY');
+
+    let authVerified = authService.verifyAuth(access_token, api_key);
+
+    if (authVerified.success && authVerified.user) {
         req.user = authVerified.user;
         next();
-    }
-
-    else
+    } else
         res.send(authVerified);
 
 }

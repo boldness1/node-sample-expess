@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   Case.init({
     status: DataTypes.INTEGER,
     location: DataTypes.STRING,
-    case_no: DataTypes.INTEGER,
+    case_no: DataTypes.STRING,
     defendant_id: DataTypes.INTEGER,
     prosecutor_id: DataTypes.INTEGER,
     case_date: DataTypes.DATE,
