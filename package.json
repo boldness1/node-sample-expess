@@ -21,7 +21,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "node-cron": "^3.0.0",
-    "sequelize": "^6.6.4"
+    "sequelize": "^6.6.4",
+    "socket.io": "^4.2.0"
   },
   "devDependencies": {
     "sqlite3": "^5.0.2"
