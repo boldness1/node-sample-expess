@@ -5,6 +5,7 @@
  */
 
 var app = require('../app');
+
 var debug = require('debug')('nodedevapi:server');
 var http = require('http');
 
@@ -25,12 +26,16 @@ const options = {
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
+
 var io = socketio(server);
+
+
 // var server = https.createServer(options,app);
 // https.createServer(options, function (req, res) {
 //     res.writeHead(200);
@@ -41,6 +46,7 @@ var io = socketio(server);
  * Listen on provided port, on all network interfaces.
  */
 
+
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -49,9 +55,114 @@ server.on('listening', onListening);
  * io socket port connection
  */
 
-io.on('connection',socket =>{
-    console.log('WS connection done....')
+const { InMemorySessionStore } = require("../services/sessionStoreService");
+const sessionStore = new InMemorySessionStore();
+
+io.use((socket, next) => {
+
+    const sessionID = socket.handshake.auth.sessionID;
+    if (sessionID) {
+        // find existing session
+        const session = sessionStore.findSession(sessionID);
+        if (session) {
+            socket.sessionID = sessionID;
+            socket.userID = session.userID;
+            socket.username = session.username;
+            return next();
+        }
+    }
+
+    const username = socket.handshake.auth.username;
+    if (!username) {
+        return next(new Error("invalid username"));
+    }
+
+    socket.sessionID = Math.floor(Math.random() * 10000000000000000000);
+    socket.userID = Math.floor(Math.random() * 10000000000000000000);
+    socket.username = username;
+
+    next();
 });
+
+
+io.on("connection", (socket) => {
+
+    sessionStore.saveSession(socket.sessionID, {
+        userID: socket.userID,
+        username: socket.username,
+        connected: true,
+    });
+
+    socket.emit("session", {
+        sessionID: socket.sessionID,
+        userID: socket.userID,
+    });
+
+    // join the "userID" room
+    socket.join(socket.userID);
+
+    const users = [];
+
+    // for (let [id, socket] of io.of("/").sockets) {
+    //     users.push({
+    //         userID: id,
+    //         username: socket.username,
+    //         messages: [],
+    //     });
+    // }
+
+    sessionStore.findAllSessions().forEach((session) => {
+        users.push({
+            userID: session.userID,
+            username: session.username,
+            connected: session.connected,
+            messages: []
+        });
+    });
+
+    socket.emit("users", users);
+
+    // notify existing users
+    socket.broadcast.emit("user_connected", {
+        userID: socket.userID,
+        username: socket.username,
+        connected: true,
+    });
+
+
+    socket.on("private_message", ({ content, to }) => {
+        console.log(content, to)
+        socket.to(to).to(socket.userID).emit("private_message", {
+            content,
+            from: socket.userID,
+            to,
+        });
+    });
+
+
+    // notify users upon disconnection
+    socket.on("disconnect", async () => {
+        console.log(socket.userID + 'is disconnecting')
+        const matchingSockets = await io.in(socket.userID).allSockets();
+        const isDisconnected = matchingSockets.size === 0;
+        if (isDisconnected) {
+            // notify other users
+            socket.broadcast.emit("user_disconnected", socket.userID);
+            // update the connection status of the session
+            sessionStore.saveSession(socket.sessionID, {
+                userID: socket.userID,
+                username: socket.username,
+                connected: false,
+            });
+        }
+    });
+
+});
+
+
+
+
+
 
 /**
  * Normalize a port into a number, string, or false.
