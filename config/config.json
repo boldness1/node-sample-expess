@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "gcloudadvVNodeDb",
-    "password": "AKIAQB3UAFQC7YFZHNPN,sR3",
+    "username":  "root",
+    "password": "null",
     "database": "advocateV",
-    "host": "34.107.126.250",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }
